@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sorteio</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="dashboards.css">
+
+    <script src="../js/funcoes.js"></script>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+</head>
+
+<body onload="validarSessao()">
+
+    <div id="susto">
+        <div class="page-container" onclick="Assustar()">
+    
+            <div class="page-content">
+    
+                <div class="simulador">
+                    <div class="container" style="width: 60%; min-width: 600px; align-items: center;">
+                        <h1>Escolha o fantoche ao qual deseja concorrer</h1>
+                        <h2><input type="radio">Louro João</h2>
+                        <img width="500px" src="../assets/imgs/lourojoao.webp">
+                        <h2><input type="radio">Ed Sheeran</h2>
+                        <img width="500px" src="../assets/imgs/edsheeran.webp">
+                        <h2><input type="radio">Tunico, irmão do Xaropinho</h2>
+                        <img width="500px" src="../assets/imgs/tunico.jpg">
+                        <h2><input type="radio">Alf, o ETeimoso</h2>
+                        <img width="500px" src="../assets/imgs/alf.jpg">
+                    </div>
+                </div>
+                <!-- simulador fim -->
+    
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
+
+<script>
+
+    function Assustar() {
+        setTimeout(() => {
+            let estilo = "background-color: black; width: 100vw; height:100vh; display:flex; flex-direction:column; align-items:center;"
+            let conteudo = `<div style="display: block; position: fixed;">
+                <a href="./ferramentas.html" style="text-decoration:none"><h1 style="color: red; font-size: 100px; text-align: center; margin-bottom: 0;"><input type="radio">VOTAR</h1></a>
+                <img width="500px" src="../assets/imgs/billy.jpg">
+                </div>
+            `
+
+        susto.style = estilo
+        susto.innerHTML = conteudo
+        }, 1000);
+    }
+
+</script>

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login</title>
+
+    <script src="./js/funcoes.js"></script>
+
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+
+<body>
+
+    <div class="page-container">
+
+        <div class="page-content">
+
+            <!--Header-->
+
+            <header>
+                <div class="container">
+                    <a class="logo" href="index.html">
+                        <img src="./assets/imgs/fantoche-icon.png" height="90%" alt="Icone Fantoche">
+                        Fantochada
+                    </a>
+                    <ul class="navbar">
+                        <li>
+                            <a class="nav-itens" href="./index.html">Inicial</a>
+                        </li>
+                        <li>
+                            <a class="nav-itens" href="./historia.html">História</a>
+                        </li>
+                        |
+                        <li>
+                            <a class="nav-itens nav-item-ativo" href="./login.html">Login</a>
+                        </li>
+                        <li>
+                            <a class="nav-itens" href="./cadastro.html">Cadastro</a>
+                        </li>
+                    </ul>
+                </div>
+            </header>
+
+            <div class="alerta_erro">
+                <div class="card_erro" id="cardErro">
+                    <span id="mensagem_erro"></span>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-title">Bem-vindo de volta!</div>
+                <div class="card-form">
+                    <div class="card-box">
+                        <label for="email_input" class="card-label">Email</label> 
+                        <input type="text" id="email_input" placeholder="Insira um Email">
+                        
+                        <label for="senha_input" class="card-label">Senha</label>
+                        <input type="password" id="senha_input" placeholder="Insira uma Senha">
+
+                        <button class="btn" onclick="entrar()">Entrar</button>
+                    </div>
+                </div>
+                <div id="div_aguardar" class="loading-div">
+                    <img src="./assets/circle-loading.gif" id="loading-gif">
+                </div>
+
+                <div id="div_erros_login">
+
+                </div>
+            </div>
+        
+        </div>
+
+        <footer>
+
+            <div class="footer-section">
+                <div class="container">
+
+                    <div class="column">
+                        <h3>
+                            <div class="logo">
+                                Fantochada
+                            </div>
+                        </h3>
+                        <p>
+                            Um mundo de infinitas possibilidades na palma da sua mão.
+                        </p>
+                    </div>
+
+                    <div class="column">
+                        <h4>
+                            Opções
+                        </h4>
+                        <p>
+                            <a href="#">Configurações</a>
+                        </p>
+                        <p>
+                            <a href="#">Termos de Uso e Privacidade</a>
+                        </p>
+                        <p>
+                            <a href="#">Ajuda</a>
+                        </p>
+                    </div>
+
+                    <div class="column">
+                        <h4>
+                            Contatos
+                        </h4>
+                        <p>fantochada@email.com</p>
+                        <p>+55 11 98765-4321</p>
+                        <p>+55 11 1234-5678</p>
+                    </div>
+
+                    <div class="column">
+                        <h4>
+                            Redes Sociais
+                        </h4>
+                        <div class="baseboard-social">
+							<a class="social-icon" href="#"><img src="assets/imgs/icon_whatsapp.png" width="30px"></a>
+							<a class="social-icon" href="#"><img src="assets/imgs/icon_facebook.png" width="30px"></a>
+							<a class="social-icon" href="#"><img src="assets/imgs/icon_instagram.png" width="30px"></a>
+						</div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="footer-copyright" style="background-color: #00000033;">
+                © 2022 Copyright Fantochada
+            </div>
+
+        </footer>
+    
+    </div>
+
+</body>
+
+</html>
+
+<script>
+
+
+    function entrar() {
+        aguardar();
+
+        var emailVar = email_input.value;
+        var senhaVar = senha_input.value;
+
+        if (emailVar == "" || senhaVar == "") {
+            cardErro.style.display = "block"
+            mensagem_erro.innerHTML = "(Mensagem de erro para todos os campos em branco)";
+            finalizarAguardar();
+            return false;
+        }
+        else {
+            setInterval(sumirMensagem, 5000)
+        }
+
+        console.log("FORM LOGIN: ", emailVar);
+        console.log("FORM SENHA: ", senhaVar);
+
+        fetch("/usuarios/autenticar", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                emailServer: emailVar,
+                senhaServer: senhaVar
+            })
+        }).then(function (resposta) {
+            console.log("ESTOU NO THEN DO entrar()!")
+
+            if (resposta.ok) {
+                console.log(resposta);
+
+                resposta.json().then(json => {
+                    console.log(json);
+                    console.log(JSON.stringify(json));
+
+                    sessionStorage.EMAIL_USUARIO = json.email;
+                    sessionStorage.NOME_USUARIO = json.nome;
+                    sessionStorage.ID_USUARIO = json.idUsuario;
+
+                    setTimeout(function () {
+                        window.location = "./dashboard/ferramentas.html";
+                    }, 1000); // apenas para exibir o loading
+
+                });
+
+            } else {
+
+                console.log("Houve um erro ao tentar realizar o login!");
+
+                resposta.text().then(texto => {
+                    console.error(texto);
+                    finalizarAguardar(texto);
+                });
+            }
+
+        }).catch(function (erro) {
+            console.log(erro);
+        })
+
+        return false;
+    }
+
+    function sumirMensagem() {
+        cardErro.style.display = "none"
+    }
+
+</script>
